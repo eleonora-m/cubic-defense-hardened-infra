@@ -2,9 +2,9 @@
 resource "aws_security_group" "public_sg" {
   name        = "cubic-defense-public-sg"
   description = "Allow inbound web traffic from the internet"
-  
+
   # Магия Terraform: Мы берем ID сети напрямую из нашего модуля VPC!
-  vpc_id      = module.vpc.vpc_id
+  vpc_id = module.vpc.vpc_id
 
   # INGRESS: Входящий трафик (Кто может к нам зайти?)
   ingress {
@@ -38,12 +38,12 @@ resource "aws_security_group" "private_sg" {
 
   # INGRESS: Защита уровня Сеньор (Zero Trust)
   ingress {
-    description     = "Allow web traffic ONLY from Public SG"
-    from_port       = 443
-    to_port         = 443
-    protocol        = "tcp"
+    description = "Allow web traffic ONLY from Public SG"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     # ОБРАТИТЕ ВНИМАНИЕ: Здесь нет IP-адресов! Мы ссылаемся на первую группу.
-    security_groups = [aws_security_group.public_sg.id] 
+    security_groups = [aws_security_group.public_sg.id]
   }
 
   egress {
